@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using disease_tracker_api.Data;
+using disease_tracker_api.Services.DiseaseService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,8 @@ namespace disease_tracker_api
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddScoped<IDiseaseService, DiseaseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
