@@ -16,7 +16,7 @@ namespace disease_tracker_api.Models
         [Required]
         [StringLength(300)]
         public string Name { get; set; }
-        public DiseaseType Type { get; set; } = DiseaseType.NonCommunicable;
+        public DiseaseType Type { get; set; }
         public DateTime DateCreated { get; set; } 
         public DateTime? DateModified { get; set; }
     }

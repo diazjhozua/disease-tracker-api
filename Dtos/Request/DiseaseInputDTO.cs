@@ -15,6 +15,7 @@ namespace disease_tracker_api.Dtos.Request
         [Display(Name = "Disease Name")]
         public string Name { get; set; }
         [Required]
+        [EnumDataType(typeof(DiseaseType))]
         public DiseaseType Type { get; set; }
 
     }
