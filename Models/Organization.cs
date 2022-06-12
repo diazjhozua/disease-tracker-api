@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace disease_tracker_api.Models
 {
-    public class Organization
+    public class Organization : BaseEntity
     {
         public Organization()
         {
