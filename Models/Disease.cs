@@ -13,8 +13,6 @@ namespace disease_tracker_api.Models
             DateCreated = DateTime.Now;
         }
 
-        [Required]
-        [StringLength(300)]
         public string Name { get; set; }
         public DiseaseType Type { get; set; }
         public DateTime DateCreated { get; set; } 

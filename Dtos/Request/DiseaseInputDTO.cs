@@ -8,14 +8,15 @@ using disease_tracker_api.Models;
 namespace disease_tracker_api.Dtos.Request
 {
 
-    public partial class DiseaseInputBaseDTO 
+    public abstract class DiseaseInputBaseDTO 
     {
-        // [Required]
-        // [StringLength(50)]
-        // [Display(Name = "Disease Name")]
+        [Required]
+        [StringLength(50)]
+        [Display(Name = "Disease Name")]
         public string Name { get; set; }
-        // [Required]
-        // [EnumDataType(typeof(DiseaseType))]
+        [Required]
+        [EnumDataType(typeof(DiseaseType))]
+        [Display(Name = "Disease Type")]
         public DiseaseType Type { get; set; }
 
     }
