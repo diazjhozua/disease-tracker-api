@@ -17,6 +17,8 @@ namespace disease_tracker_api.Dtos.Response
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public DiseaseType Type { get; set; } = DiseaseType.NonCommunicable;
         public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        public DateTime DateModified { get; set; }
+        public bool IsArchived { get; set; }
+        public string ArchiveReason { get; set; }
     }
 }

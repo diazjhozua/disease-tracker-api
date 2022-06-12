@@ -28,7 +28,13 @@ namespace disease_tracker_api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _diseaseService.GetAllDiseases());
+            return Ok(await _diseaseService.GetAllDiseases(false));
+        }
+
+        [HttpGet("archived")]
+        public async Task<IActionResult> GetArchived()
+        {
+            return Ok(await _diseaseService.GetAllDiseases(true));
         }
 
         [HttpGet("{id}")]
@@ -38,6 +44,14 @@ namespace disease_tracker_api.Controllers
             if (response.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Disease, new { id }));
             return Ok(await _diseaseService.GetDiseaseById(id));
         }
+
+        [HttpGet("create")]
+        public IActionResult GetCreate()
+        {
+            Dictionary<string,int> enumValue = ((DiseaseType[])Enum.GetValues(typeof(DiseaseType))).ToDictionary(k => _handler.Utility.SplitCamelCase(k.ToString()), v => (int)v);
+            return Ok(enumValue);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DiseaseCreateDTO disease)
@@ -54,13 +68,10 @@ namespace disease_tracker_api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, [FromBody] ArchiveInputDTO archiveInput)
         {
-
-            ServiceResponse<List<DiseaseDTO>> response = await _diseaseService.DeleteDisease(id);
-            if (response.Data == null) {
-                return NotFound(response);
-            }
+            ServiceResponse<List<DiseaseDTO>> response = await _diseaseService.DeleteDisease(id, archiveInput);
+            if (response.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Disease, new { id }));
             return Ok(response);
         }
     }

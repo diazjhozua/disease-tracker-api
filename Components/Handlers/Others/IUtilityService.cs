@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,5 +11,7 @@ namespace disease_tracker_api.Components.Handlers.Others
     {
         // AppSettings GetAppSettings();
         dynamic FormatObjectResult(int code, dynamic message = null, object data = null);
+
+        public string SplitCamelCase(string input);
     }
 }

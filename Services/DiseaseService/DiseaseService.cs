@@ -24,11 +24,10 @@ namespace disease_tracker_api.Services.DiseaseService
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<List<DiseaseDTO>>> GetAllDiseases()
+        public async Task<ServiceResponse<List<DiseaseDTO>>> GetAllDiseases(bool IsArchived)
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
-            List<Disease> dbDiseases = await _context.Diseases.ToListAsync();
-
+            List<Disease> dbDiseases = await _context.Diseases.Where(c => c.IsArchived == IsArchived).ToListAsync();
             serviceResponse.Data = (dbDiseases.Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
             return serviceResponse;
         }
@@ -41,48 +40,56 @@ namespace disease_tracker_api.Services.DiseaseService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<DiseaseDTO>>> AddDisease(DiseaseCreateDTO disease)
+        public async Task<ServiceResponse<List<DiseaseDTO>>> AddDisease(DiseaseCreateDTO diseaseInput)
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
-            Disease newDisease = _mapper.Map<Disease>(disease);
+            Disease newDisease = _mapper.Map<Disease>(diseaseInput);
             await _context.Diseases.AddAsync(newDisease);
             await _context.SaveChangesAsync();
             serviceResponse.Data = (_context.Diseases.Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<DiseaseDTO>> UpdateDisease(int id, DiseaseUpdateDTO disease)
+        public async Task<ServiceResponse<DiseaseDTO>> UpdateDisease(int id, DiseaseUpdateDTO diseaseInput)
         {
             ServiceResponse<DiseaseDTO> serviceResponse = new ServiceResponse<DiseaseDTO>();
                     
-            Disease fetchDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
+            Disease dbDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
             
-            if (fetchDisease != null) 
+            if (dbDisease != null) 
             {
-                fetchDisease.Name = disease.Name;
-                fetchDisease.Type = disease.Type;
-                fetchDisease.DateModified = disease.DateModified;
+                dbDisease.Name = diseaseInput.Name;
+                dbDisease.Type = diseaseInput.Type;
+                dbDisease.DateModified = diseaseInput.DateModified;
 
-                _context.Diseases.Update(fetchDisease);
+                _context.Diseases.Update(dbDisease);
                 await _context.SaveChangesAsync();
 
-                serviceResponse.Data = _mapper.Map<DiseaseDTO>(fetchDisease);
+                serviceResponse.Data = _mapper.Map<DiseaseDTO>(dbDisease);
             }
 
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<DiseaseDTO>>> DeleteDisease(int id)
+        public async Task<ServiceResponse<List<DiseaseDTO>>> DeleteDisease(int id, ArchiveInputDTO archiveInput)
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
 
-            Disease disease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
-            if(disease != null)
+            Disease dbDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
+            if(dbDisease != null)
             {
-                _context.Diseases.Remove(disease);
+                dbDisease.IsArchived = archiveInput.IsArchived;
+                if (archiveInput.IsArchived) dbDisease.ArchiveReason = archiveInput.ArchiveReason;
+
+                _context.Diseases.Update(dbDisease);
+
+                bool isFromDeletePage = archiveInput.IsArchived ?  false : true;
                 await _context.SaveChangesAsync();
-                serviceResponse.Data = (_context.Diseases.Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
-                serviceResponse.Messsage = "Disease successfully deleted";
+
+                serviceResponse.Data = (_context.Diseases.Where(c => c.IsArchived == isFromDeletePage)
+                    .Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
+
+                serviceResponse.Messsage = (archiveInput.IsArchived) ?  "Succesfully marked as Archived" : "Successfully restored";
             }
             return serviceResponse;
         }

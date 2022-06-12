@@ -10,10 +10,10 @@ namespace disease_tracker_api.Services.DiseaseService
 {
     public interface IDiseaseService
     {
-        Task<ServiceResponse<List<DiseaseDTO>>> GetAllDiseases();
+        Task<ServiceResponse<List<DiseaseDTO>>> GetAllDiseases(bool IsArchived);
         Task<ServiceResponse<DiseaseDTO>> GetDiseaseById(int id);
-        Task<ServiceResponse<List<DiseaseDTO>>> AddDisease(DiseaseCreateDTO disease);
-        Task<ServiceResponse<DiseaseDTO>> UpdateDisease(int id, DiseaseUpdateDTO disease);
-        Task<ServiceResponse<List<DiseaseDTO>>> DeleteDisease(int id);
+        Task<ServiceResponse<List<DiseaseDTO>>> AddDisease(DiseaseCreateDTO diseaseInput);
+        Task<ServiceResponse<DiseaseDTO>> UpdateDisease(int id, DiseaseUpdateDTO diseaseInput);
+        Task<ServiceResponse<List<DiseaseDTO>>> DeleteDisease(int id, ArchiveInputDTO archiveInput);
     }
 }

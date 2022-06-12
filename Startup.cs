@@ -48,7 +48,7 @@ namespace disease_tracker_api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<ResponseHandler>();
+            // app.UseMiddleware<ResponseHandler>();
             
             app.UseHttpsRedirection();
 

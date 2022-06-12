@@ -44,6 +44,12 @@ namespace disease_tracker_api.Components.Handlers.Others
             return result;
         }
 
+        public string SplitCamelCase(string input)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(input, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+        }
+
+
         // public AppSettings GetAppSettings() => _appSettings;
     }
 }
