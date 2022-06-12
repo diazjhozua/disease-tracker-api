@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using disease_tracker_api.Components;
 using disease_tracker_api.Data;
+using disease_tracker_api.Extensions;
 using disease_tracker_api.Services.DiseaseService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +45,8 @@ namespace disease_tracker_api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ResponseHandler>();
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();

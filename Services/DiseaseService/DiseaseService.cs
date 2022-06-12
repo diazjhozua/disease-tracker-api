@@ -54,6 +54,7 @@ namespace disease_tracker_api.Services.DiseaseService
         public async Task<ServiceResponse<DiseaseDTO>> UpdateDisease(int id, DiseaseUpdateDTO disease)
         {
             ServiceResponse<DiseaseDTO> serviceResponse = new ServiceResponse<DiseaseDTO>();
+
             try {
                 Disease fetchDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
                 
