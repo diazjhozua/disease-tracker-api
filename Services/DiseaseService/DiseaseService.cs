@@ -54,28 +54,19 @@ namespace disease_tracker_api.Services.DiseaseService
         public async Task<ServiceResponse<DiseaseDTO>> UpdateDisease(int id, DiseaseUpdateDTO disease)
         {
             ServiceResponse<DiseaseDTO> serviceResponse = new ServiceResponse<DiseaseDTO>();
-            try {
-                Disease fetchDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
-                
-                if (fetchDisease != null) 
-                {
-                    fetchDisease.Name = disease.Name;
-                    fetchDisease.Type = disease.Type;
-                    fetchDisease.DateModified = disease.DateModified;
+                    
+            Disease fetchDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
+            
+            if (fetchDisease != null) 
+            {
+                fetchDisease.Name = disease.Name;
+                fetchDisease.Type = disease.Type;
+                fetchDisease.DateModified = disease.DateModified;
 
-                    _context.Diseases.Update(fetchDisease);
-                    await _context.SaveChangesAsync();
+                _context.Diseases.Update(fetchDisease);
+                await _context.SaveChangesAsync();
 
-                    serviceResponse.Data = _mapper.Map<DiseaseDTO>(fetchDisease);
-                }
-                else {
-                    serviceResponse.Success = false;
-                    serviceResponse.Messsage = "Disease Not found";
-                }
-            } catch (Exception ex) {
-                serviceResponse.Success = false;
-                serviceResponse.Messsage = ex.Message;
-                serviceResponse.Messsage = "ex.Message";
+                serviceResponse.Data = _mapper.Map<DiseaseDTO>(fetchDisease);
             }
 
             return serviceResponse;
@@ -85,25 +76,14 @@ namespace disease_tracker_api.Services.DiseaseService
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
 
-            try {
-                Disease disease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
-                if(disease != null)
-                {
-                    _context.Diseases.Remove(disease);
-                    await _context.SaveChangesAsync();
-                    serviceResponse.Data = (_context.Diseases.Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
-                    serviceResponse.Messsage = "Disease successfully deleted";
-                }
-                else {
-                    serviceResponse.Success = false;
-                    serviceResponse.Messsage = "Disease not found";
-                }
-            } 
-            catch (Exception ex) {
-                serviceResponse.Success = false;
-                serviceResponse.Messsage = ex.Message;
+            Disease disease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
+            if(disease != null)
+            {
+                _context.Diseases.Remove(disease);
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = (_context.Diseases.Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
+                serviceResponse.Messsage = "Disease successfully deleted";
             }
-
             return serviceResponse;
         }
     }

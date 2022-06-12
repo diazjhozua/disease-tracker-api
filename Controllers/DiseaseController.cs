@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using disease_tracker_api.Components.Handlers;
+using disease_tracker_api.Configuration;
 using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Models;
@@ -13,12 +15,12 @@ namespace disease_tracker_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DiseaseController : ControllerBase
+    public class DiseaseController : BaseController
     {
 
         private readonly IDiseaseService _diseaseService;
 
-        public DiseaseController(IDiseaseService diseaseService)
+        public DiseaseController(IDiseaseService diseaseService, IHandler handler): base(handler)
         {
             _diseaseService = diseaseService;
         }
@@ -32,6 +34,8 @@ namespace disease_tracker_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
+            ServiceResponse<DiseaseDTO> response = await _diseaseService.GetDiseaseById(id);
+            if (response.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Disease, new { id }));
             return Ok(await _diseaseService.GetDiseaseById(id));
         }
 
@@ -44,12 +48,15 @@ namespace disease_tracker_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] DiseaseUpdateDTO disease)
         {
+            ServiceResponse<DiseaseDTO> response = await _diseaseService.UpdateDisease(id, disease);
+            if (response.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Disease, new { id }));
             return Ok(await _diseaseService.UpdateDisease(id, disease));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+
             ServiceResponse<List<DiseaseDTO>> response = await _diseaseService.DeleteDisease(id);
             if (response.Data == null) {
                 return NotFound(response);
