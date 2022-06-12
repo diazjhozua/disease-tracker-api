@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using disease_tracker_api.Components;
+using disease_tracker_api.Components.Handlers;
+using disease_tracker_api.Components.Handlers.Others;
 using disease_tracker_api.Data;
 using disease_tracker_api.Services.DiseaseService;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +36,8 @@ namespace disease_tracker_api
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<IDiseaseService, DiseaseService>();
+            services.AddScoped<IHandler, Handler>();
+            services.AddScoped<IUtilityService, UtilityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

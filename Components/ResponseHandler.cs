@@ -11,7 +11,7 @@ namespace disease_tracker_api.Components
 {
     public class ResponseHandler
     {
-         private readonly RequestDelegate _next;
+        private readonly RequestDelegate _next;
         public ResponseHandler(RequestDelegate next) => _next = next;
 
         public async Task Invoke(HttpContext context)
@@ -24,7 +24,7 @@ namespace disease_tracker_api.Components
             {
                 Console.WriteLine(ex);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var response = context.Response;
                 // await _logService.AddAsync(new Log
