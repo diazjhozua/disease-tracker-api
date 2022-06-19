@@ -11,6 +11,10 @@ namespace disease_tracker_api.Dtos.Response
 
         public string Region { get; set; }
 
+        public string Email { get; set; }
+        
+        public string MobileNo { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public DateTime DateModified { get; set; }

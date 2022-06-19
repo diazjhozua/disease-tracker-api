@@ -24,28 +24,28 @@ namespace disease_tracker_api.Dtos.Request
         [Display(Name = "Mobile No")]
         public string MobileNo { get; set; }
 
-        [Required]
+        // [Required]
         [StringLength(100)]
         public string Region { get; set; }
 
-        [Required]
+        // [Required]
         [StringLength(100)]
         public string Country { get; set; }
 
-        [Required]
+        // [Required]
         [StringLength(100)]
         public string City { get; set; }
 
-        [Required]
+        // [Required]
         [StringLength(100)]
         public string Province { get; set; }
         
-        [RequiredInt]
+        // [RequiredInt]
         [RegularExpression("([0-9]+)", ErrorMessage = "The {0} field is not a valid zip code.")]
         [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
         
-        [Required]
+        // [Required]
         [StringLength(1000)]
         public string Address { get; set; }
     }

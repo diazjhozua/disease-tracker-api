@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Organization_tracker_api.Services.OrganizationService;
 
 namespace disease_tracker_api
 {
@@ -36,6 +37,7 @@ namespace disease_tracker_api
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<IDiseaseService, DiseaseService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IHandler, Handler>();
             services.AddScoped<IUtilityService, UtilityService>();
         }
