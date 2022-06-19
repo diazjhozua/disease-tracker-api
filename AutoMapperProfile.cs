@@ -12,6 +12,8 @@ namespace dotnet_rpg
         {
             CreateMap<Disease, DiseaseDTO>();
             CreateMap<DiseaseCreateDTO, Disease>();
+            CreateMap<Organization, OrganizationDTO>();
+            CreateMap<OrganizationInputDTO, Organization>();
         }
     }
 }

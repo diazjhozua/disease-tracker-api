@@ -7,6 +7,8 @@ namespace disease_tracker_api.Dtos.Response
 {
     public class OrganizationDTO
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Region { get; set; }

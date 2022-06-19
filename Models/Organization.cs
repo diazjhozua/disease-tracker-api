@@ -24,26 +24,20 @@ namespace disease_tracker_api.Models
         [StringLength(50)]
         public string MobileNo { get; set; }
 
-        [Required]
         [StringLength(100)]
         public string Region { get; set; }
 
-        [Required]
         [StringLength(100)]
         public string Country { get; set; }
 
-        [Required]
         [StringLength(100)]
         public string City { get; set; }
 
-        [Required]
         [StringLength(100)]
         public string Province { get; set; }
 
-        [Required]
         public int ZipCode { get; set; }
 
-        [Required]
         [StringLength(1000)]
         public string Address { get; set; }
 

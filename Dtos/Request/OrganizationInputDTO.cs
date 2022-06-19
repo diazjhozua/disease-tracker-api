@@ -24,7 +24,7 @@ namespace disease_tracker_api.Dtos.Request
         [Display(Name = "Mobile No")]
         public string MobileNo { get; set; }
 
-        // [Required]
+        [Required]
         [StringLength(100)]
         public string Region { get; set; }
 

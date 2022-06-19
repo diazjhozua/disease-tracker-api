@@ -42,7 +42,7 @@ namespace disease_tracker_api.Controllers
         {
             ServiceResponse<DiseaseDTO> response = await _diseaseService.GetDiseaseById(id);
             if (response.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Disease, new { id }));
-            return Ok(await _diseaseService.GetDiseaseById(id));
+            return Ok(response);
         }
 
         [HttpGet("create")]
