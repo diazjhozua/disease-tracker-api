@@ -2,26 +2,81 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using disease_tracker_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace disease_tracker_api.Data
 {
    public class AuthRespository : IAuthRepository
    {
     
-      public Task<ServiceResponse<string>> Login(string username, string password)
+      private readonly DataContext _context;
+      private readonly IConfiguration _configuration;
+
+      public AuthRespository(DataContext context, IConfiguration configuration)
+      {
+         _context = context;
+         _configuration = configuration;
+      }
+
+      public Task<ServiceResponse<string>> Login(string email, string password)
       {
          throw new NotImplementedException();
       }
 
-      public Task<ServiceResponse<int>> Register(User user, string password)
+      public async Task<ServiceResponse<int>> Register(User user, string password)
       {
-         throw new NotImplementedException();
+        ServiceResponse<int> response = new ServiceResponse<int>();
+
+        if(await UserExists(user.Email)) {
+          response.Success = false;
+          response.Messsage = "Email already exists";
+          return response;
+        }
+
+         CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+         user.PasswordHash = passwordHash;
+         user.PasswordSalt = passwordSalt;
+
+         await _context.Users.AddAsync(user);
+         await _context.SaveChangesAsync();
+         
+         response.Data = user.Id;
+         return response;
       }
 
-      public Task<bool> UserExists(string username)
+      public async Task<bool> UserExists(string email)
       {
-         throw new NotImplementedException();
+         if(await _context.Users.AnyAsync(x=> x.Email.ToLower() == email.ToLower())) {
+         return true;
+         }
+         return false;
+      }
+
+      private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) 
+      {
+         using(var hmac = new System.Security.Cryptography.HMACSHA512())
+         {
+               passwordSalt = hmac.Key;
+               passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+         }
+      }
+
+      private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt) 
+      {
+         using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+         {
+         var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+         for(int i=0; i < computedHash.Length; i++)
+         {
+            if(computedHash[i] != passwordHash[i]) {
+               return false;
+            }
+         }
+         return true;
+         }
       }
    }
 }

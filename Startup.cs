@@ -38,6 +38,7 @@ namespace disease_tracker_api
 
             services.AddScoped<IDiseaseService, DiseaseService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
+            services.AddScoped<IAuthRepository, AuthRespository>();
             services.AddScoped<IHandler, Handler>();
             services.AddScoped<IUtilityService, UtilityService>();
         }
