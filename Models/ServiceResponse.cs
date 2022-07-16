@@ -1,4 +1,4 @@
-namespace dotnet_rpg.Models
+namespace disease_tracker_api.Models
 {
     public class ServiceResponse<T>
     {
