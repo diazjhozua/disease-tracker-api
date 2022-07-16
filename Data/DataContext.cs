@@ -12,5 +12,6 @@ namespace disease_tracker_api.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options){}
 
           public DbSet<Disease> Diseases { get; set; }
+          public DbSet<Organization> Organizations { get; set; }
     }
 }

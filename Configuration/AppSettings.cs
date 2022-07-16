@@ -23,5 +23,7 @@ namespace disease_tracker_api.Configuration
     public sealed class Entities
     {
         public const string Disease = "Disease";
+        
+        public const string Organization = "Organization";
     }
 }
