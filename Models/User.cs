@@ -12,5 +12,6 @@ namespace disease_tracker_api.Models
         public int MyProperty { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public List<Organization> Organizations {get; set;}
     }
 }

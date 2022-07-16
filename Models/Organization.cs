@@ -51,5 +51,7 @@ namespace disease_tracker_api.Models
 
         public bool IsArchived { get; set; } = false;
 
+        public User User { get; set; }
+
     }
 }
