@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using dotnet_rpg.Models;
+using disease_tracker_api.Models;
 using Microsoft.EntityFrameworkCore;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Dtos.Request;
-using disease_tracker_api.Models;
 using disease_tracker_api.Data;
 
 namespace Organization_tracker_api.Services.OrganizationService

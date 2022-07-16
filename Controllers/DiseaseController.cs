@@ -8,7 +8,6 @@ using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Models;
 using disease_tracker_api.Services.DiseaseService;
-using dotnet_rpg.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace disease_tracker_api.Controllers

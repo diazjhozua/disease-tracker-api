@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Dtos.Response;
-using dotnet_rpg.Models;
+using disease_tracker_api.Models;
 
 namespace disease_tracker_api.Services.DiseaseService
 {

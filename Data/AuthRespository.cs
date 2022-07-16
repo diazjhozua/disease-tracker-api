@@ -8,6 +8,7 @@ namespace disease_tracker_api.Data
 {
    public class AuthRespository : IAuthRepository
    {
+    
       public Task<ServiceResponse<string>> Login(string username, string password)
       {
          throw new NotImplementedException();

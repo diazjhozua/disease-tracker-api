@@ -6,7 +6,7 @@ using disease_tracker_api.Components.Handlers;
 using disease_tracker_api.Configuration;
 using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Dtos.Response;
-using dotnet_rpg.Models;
+using disease_tracker_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Organization_tracker_api.Services.OrganizationService;
 

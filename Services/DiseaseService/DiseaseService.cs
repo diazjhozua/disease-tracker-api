@@ -7,7 +7,6 @@ using disease_tracker_api.Data;
 using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Models;
-using dotnet_rpg.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
