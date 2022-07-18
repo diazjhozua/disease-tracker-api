@@ -42,7 +42,7 @@ namespace disease_tracker_api.Controllers
 
             if(!response.Success)
             {
-                return BadRequest(response);
+                return Unauthorized(response);
             } 
             return Ok(response);
         }        
