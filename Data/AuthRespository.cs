@@ -20,9 +20,24 @@ namespace disease_tracker_api.Data
          _configuration = configuration;
       }
 
-      public Task<ServiceResponse<string>> Login(string email, string password)
+      public async Task<ServiceResponse<string>> Login(string email, string password)
       {
-         throw new NotImplementedException();
+         ServiceResponse<string> response = new ServiceResponse<string>();
+         User user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Equals(email.ToLower()));
+         if (user ==null) {
+         response.Success = false;
+         response.Messsage = "Invalid credentials";
+         } else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) 
+         {
+         response.Success = false;
+         response.Messsage = "Invalid credentials";
+         } else 
+         {
+            response.Data = user.Id.ToString();
+         // response.Data = CreateToken(user);
+         }
+
+         return response;
       }
 
       public async Task<ServiceResponse<int>> Register(User user, string password)

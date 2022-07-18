@@ -32,6 +32,19 @@ namespace disease_tracker_api.Controllers
                 return BadRequest(response);
             } 
             return Ok(response);
+        }
+        
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(UserLoginInputDTO request) {
+            ServiceResponse<string> response = await _authRepo.Login(
+                request.Email, request.Password
+            );
+
+            if(!response.Success)
+            {
+                return BadRequest(response);
+            } 
+            return Ok(response);
         }        
     }
 }
