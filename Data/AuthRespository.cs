@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using disease_tracker_api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace disease_tracker_api.Data
 {
@@ -33,8 +37,7 @@ namespace disease_tracker_api.Data
          response.Messsage = "Invalid credentials";
          } else 
          {
-            response.Data = user.Id.ToString();
-         // response.Data = CreateToken(user);
+            response.Data = CreateToken(user);
          }
 
          return response;
@@ -92,6 +95,33 @@ namespace disease_tracker_api.Data
          }
          return true;
          }
+      }
+
+      private string CreateToken(User user)
+      {
+         List<Claim> claims = new List<Claim>
+         {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Email),
+         };
+
+         SymmetricSecurityKey key = new SymmetricSecurityKey(
+         Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value)
+         );
+
+         SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+         {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(1),
+            SigningCredentials = creds
+         };
+
+         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+
+         return tokenHandler.WriteToken(token);
       }
    }
 }
