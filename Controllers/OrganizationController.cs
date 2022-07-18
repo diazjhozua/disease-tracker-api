@@ -7,11 +7,13 @@ using disease_tracker_api.Configuration;
 using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Organization_tracker_api.Services.OrganizationService;
 
 namespace disease_tracker_api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class OrganizationController : BaseController

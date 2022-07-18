@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Dtos.Request;
 using disease_tracker_api.Data;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Organization_tracker_api.Services.OrganizationService
 {
@@ -15,17 +17,21 @@ namespace Organization_tracker_api.Services.OrganizationService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
-
-        public OrganizationService(IMapper mapper, DataContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        
+        public OrganizationService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ServiceResponse<List<OrganizationDTO>>> GetAllOrganizations(bool IsArchived)
         {
             ServiceResponse<List<OrganizationDTO>> serviceResponse = new ServiceResponse<List<OrganizationDTO>>();
-            List<Organization> dbOrganizations = await _context.Organizations.Where(c => c.IsArchived == IsArchived).ToListAsync();
+            List<Organization> dbOrganizations = await _context.Organizations.Where(c => c.IsArchived == IsArchived && c.User.Id == GetUserId() ).ToListAsync();
             serviceResponse.Data = (dbOrganizations.Select(c => _mapper.Map<OrganizationDTO>(c))).ToList();
             return serviceResponse;
         }
@@ -33,7 +39,7 @@ namespace Organization_tracker_api.Services.OrganizationService
         public async Task<ServiceResponse<OrganizationDTO>> GetOrganizationById(int id)
         {
             ServiceResponse<OrganizationDTO> serviceResponse = new ServiceResponse<OrganizationDTO>();
-            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == id);
+            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == id && c.User.Id == GetUserId());
             serviceResponse.Data = _mapper.Map<OrganizationDTO>(dbOrganization);
             return serviceResponse;
         }
@@ -42,16 +48,17 @@ namespace Organization_tracker_api.Services.OrganizationService
         {
             ServiceResponse<List<OrganizationDTO>> serviceResponse = new ServiceResponse<List<OrganizationDTO>>();
             Organization newOrganization = _mapper.Map<Organization>(organizationInput);
+            newOrganization.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
             await _context.Organizations.AddAsync(newOrganization);
             await _context.SaveChangesAsync();
-            serviceResponse.Data = (_context.Organizations.Select(c => _mapper.Map<OrganizationDTO>(c))).ToList();
+            serviceResponse.Data = (_context.Organizations.Where(c => c.User.Id == GetUserId()).Select(c => _mapper.Map<OrganizationDTO>(c))).ToList();
             return serviceResponse;
         }
         public async Task<ServiceResponse<OrganizationDTO>> UpdateOrganization(int id, OrganizationInputDTO organizationInput)
         {
             ServiceResponse<OrganizationDTO> serviceResponse = new ServiceResponse<OrganizationDTO>();
                     
-            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c => c.Id == id);
+            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId());
             
             if (dbOrganization != null) 
             {
@@ -78,7 +85,7 @@ namespace Organization_tracker_api.Services.OrganizationService
         {
             ServiceResponse<List<OrganizationDTO>> serviceResponse = new ServiceResponse<List<OrganizationDTO>>();
 
-            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c => c.Id == id);
+            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId());
             if(dbOrganization != null)
             {
                 dbOrganization.IsArchived = archiveInput.IsArchived;
