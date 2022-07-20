@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using dotnet_rpg.Models;
+using disease_tracker_api.Models;
 using disease_tracker_api.Dtos.Response;
 using disease_tracker_api.Dtos.Request;
 

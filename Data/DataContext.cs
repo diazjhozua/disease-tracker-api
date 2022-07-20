@@ -13,5 +13,6 @@ namespace disease_tracker_api.Data
 
           public DbSet<Disease> Diseases { get; set; }
           public DbSet<Organization> Organizations { get; set; }
+          public DbSet<User> Users { get; set; }
     }
 }
