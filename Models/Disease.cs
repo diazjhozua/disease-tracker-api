@@ -22,5 +22,6 @@ namespace disease_tracker_api.Models
         #nullable enable
         public string? ArchiveReason { get; set; } = null;
         public bool IsArchived { get; set; } = false;
+        public Organization Organization { get; set; }
     }
 } 

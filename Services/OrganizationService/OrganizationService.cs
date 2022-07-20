@@ -77,7 +77,6 @@ namespace Organization_tracker_api.Services.OrganizationService
 
                 serviceResponse.Data = _mapper.Map<OrganizationDTO>(dbOrganization);
             }
-
             return serviceResponse;
         }
 
