@@ -13,6 +13,7 @@ namespace dotnet_rpg
             CreateMap<Disease, DiseaseDTO>();
             CreateMap<DiseaseCreateDTO, Disease>();
             CreateMap<Organization, OrganizationDTO>();
+            CreateMap<Organization, OrganizationDieseasesDTO>();
             CreateMap<OrganizationInputDTO, Organization>();
         }
     }

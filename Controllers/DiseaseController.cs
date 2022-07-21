@@ -49,8 +49,10 @@ namespace disease_tracker_api.Controllers
         [HttpGet("create")]
         public IActionResult GetCreate()
         {
+            ServiceResponse<Dictionary<string, int>> response = new ServiceResponse<Dictionary<string, int>>();
             Dictionary<string,int> enumValue = ((DiseaseType[])Enum.GetValues(typeof(DiseaseType))).ToDictionary(k => _handler.Utility.SplitCamelCase(k.ToString()), v => (int)v);
-            return Ok(enumValue);
+            response.Data = enumValue;
+            return Ok(response);
         }
 
 

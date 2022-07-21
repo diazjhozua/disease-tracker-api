@@ -36,11 +36,11 @@ namespace Organization_tracker_api.Services.OrganizationService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<OrganizationDTO>> GetOrganizationById(int id)
+        public async Task<ServiceResponse<OrganizationDieseasesDTO>> GetOrganizationById(int id)
         {
-            ServiceResponse<OrganizationDTO> serviceResponse = new ServiceResponse<OrganizationDTO>();
-            Organization dbOrganization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == id && c.User.Id == GetUserId());
-            serviceResponse.Data = _mapper.Map<OrganizationDTO>(dbOrganization);
+            ServiceResponse<OrganizationDieseasesDTO> serviceResponse = new ServiceResponse<OrganizationDieseasesDTO>();
+            Organization dbOrganization = await _context.Organizations.Include(x => x.Diseases).FirstOrDefaultAsync(c=> c.Id == id && c.User.Id == GetUserId());
+            serviceResponse.Data = _mapper.Map<OrganizationDieseasesDTO>(dbOrganization);
             return serviceResponse;
         }
 

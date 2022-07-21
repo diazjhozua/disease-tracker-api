@@ -14,6 +14,11 @@ namespace disease_tracker_api.Dtos.Request
         [StringLength(50)]
         [Display(Name = "Disease Name")]
         public string Name { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        [Display(Name = "Organization")]
+        public int OrganizationId { get; set; }
         [Required]
         [EnumDataType(typeof(DiseaseType))]
         [Display(Name = "Disease Type")]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using disease_tracker_api.Models;
 
 namespace disease_tracker_api.Dtos.Response
 {
@@ -28,5 +29,10 @@ namespace disease_tracker_api.Dtos.Response
         public string ArchiveReason { get; set; }
 
         public bool IsArchived { get; set; } = false;
+    }
+
+    public class OrganizationDieseasesDTO : OrganizationDTO 
+    {
+        public List<DiseaseDTO> Diseases {get; set;}
     }
 }

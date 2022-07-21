@@ -44,12 +44,15 @@ namespace disease_tracker_api.Models
         public DateTime DateCreated { get; set; }
 
         public DateTime? DateModified { get; set; }
-
+        
+   
         [StringLength(1000)]
         #nullable enable
         public string? ArchiveReason { get; set; }
 
         public bool IsArchived { get; set; } = false;
+
+        public List<Disease> Diseases {get; set;}
 
         public User User { get; set; }
 

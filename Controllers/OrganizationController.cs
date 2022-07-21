@@ -40,7 +40,7 @@ namespace disease_tracker_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            ServiceResponse<OrganizationDTO> serviceResponse = await _organizationService.GetOrganizationById(id);
+            ServiceResponse<OrganizationDieseasesDTO> serviceResponse = await _organizationService.GetOrganizationById(id);
             if (serviceResponse.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Organization, new { id }));
             return Ok(serviceResponse);
         }

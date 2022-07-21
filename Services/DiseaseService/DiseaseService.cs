@@ -48,7 +48,21 @@ namespace disease_tracker_api.Services.DiseaseService
         public async Task<ServiceResponse<List<DiseaseDTO>>> AddDisease(DiseaseCreateDTO diseaseInput)
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
-            Disease newDisease = _mapper.Map<Disease>(diseaseInput);
+            Organization organization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == diseaseInput.OrganizationId);
+
+            if (organization == null)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Messsage = "Organization not found";
+                return serviceResponse;
+            }
+
+            Disease newDisease = new Disease {
+                Name = diseaseInput.Name,
+                Type = diseaseInput.Type,
+                Organization = organization
+            };
+
             await _context.Diseases.AddAsync(newDisease);
             await _context.SaveChangesAsync();
             serviceResponse.Data = (_context.Diseases.Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
