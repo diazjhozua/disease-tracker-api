@@ -48,7 +48,7 @@ namespace disease_tracker_api.Services.DiseaseService
         public async Task<ServiceResponse<List<DiseaseDTO>>> AddDisease(DiseaseCreateDTO diseaseInput)
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
-            Organization organization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == diseaseInput.OrganizationId);
+            Organization organization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == diseaseInput.OrganizationId &&  c.User.Id == GetUserId());
 
             if (organization == null)
             {
@@ -74,41 +74,48 @@ namespace disease_tracker_api.Services.DiseaseService
             ServiceResponse<DiseaseDTO> serviceResponse = new ServiceResponse<DiseaseDTO>();
                     
             Disease dbDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
-            
-            if (dbDisease != null) 
-            {
-                dbDisease.Name = diseaseInput.Name;
-                dbDisease.Type = diseaseInput.Type;
-                dbDisease.DateModified = diseaseInput.DateModified;
 
-                _context.Diseases.Update(dbDisease);
-                await _context.SaveChangesAsync();
+            if (dbDisease != null) {
+                Organization organization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == dbDisease.Organization.Id &&  c.User.Id == GetUserId());
+                if (organization != null) 
+                {
+                    dbDisease.Name = diseaseInput.Name;
+                    dbDisease.Type = diseaseInput.Type;
+                    dbDisease.DateModified = diseaseInput.DateModified;
 
-                serviceResponse.Data = _mapper.Map<DiseaseDTO>(dbDisease);
+                    _context.Diseases.Update(dbDisease);
+                    await _context.SaveChangesAsync();
+
+                    serviceResponse.Data = _mapper.Map<DiseaseDTO>(dbDisease);
+                }
             }
-
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<DiseaseDTO>>> DeleteDisease(int id, ArchiveInputDTO archiveInput)
         {
             ServiceResponse<List<DiseaseDTO>> serviceResponse = new ServiceResponse<List<DiseaseDTO>>();
-
             Disease dbDisease = await _context.Diseases.FirstOrDefaultAsync(c => c.Id == id);
+
             if(dbDisease != null)
             {
-                dbDisease.IsArchived = archiveInput.IsArchived;
-                if (archiveInput.IsArchived) dbDisease.ArchiveReason = archiveInput.ArchiveReason;
+                Organization organization = await _context.Organizations.FirstOrDefaultAsync(c=> c.Id == dbDisease.Organization.Id &&  c.User.Id == GetUserId());
+                
+                if (organization != null) 
+                {
+                    dbDisease.IsArchived = archiveInput.IsArchived;
+                    if (archiveInput.IsArchived) dbDisease.ArchiveReason = archiveInput.ArchiveReason;
 
-                _context.Diseases.Update(dbDisease);
+                    _context.Diseases.Update(dbDisease);
 
-                bool isFromDeletePage = archiveInput.IsArchived ?  false : true;
-                await _context.SaveChangesAsync();
+                    bool isFromDeletePage = archiveInput.IsArchived ?  false : true;
+                    await _context.SaveChangesAsync();
 
-                serviceResponse.Data = (_context.Diseases.Where(c => c.IsArchived == isFromDeletePage)
-                    .Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
+                    serviceResponse.Data = (_context.Diseases.Where(c => c.IsArchived == isFromDeletePage)
+                        .Select(c => _mapper.Map<DiseaseDTO>(c))).ToList();
 
-                serviceResponse.Messsage = (archiveInput.IsArchived) ?  "Succesfully marked as Archived" : "Successfully restored";
+                    serviceResponse.Messsage = (archiveInput.IsArchived) ?  "Succesfully marked as Archived" : "Successfully restored";
+                }
             }
             return serviceResponse;
         }

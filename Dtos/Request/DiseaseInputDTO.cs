@@ -16,10 +16,6 @@ namespace disease_tracker_api.Dtos.Request
         public string Name { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
-        [Display(Name = "Organization")]
-        public int OrganizationId { get; set; }
-        [Required]
         [EnumDataType(typeof(DiseaseType))]
         [Display(Name = "Disease Type")]
         public DiseaseType Type { get; set; }
@@ -33,6 +29,11 @@ namespace disease_tracker_api.Dtos.Request
             DateModified = DateTime.Now;
         }
 
+        [Required]
+        [Range(1, int.MaxValue)]
+        [Display(Name = "Organization")]
+        public int OrganizationId { get; set; }
+        
         public DateTime DateCreated { get; set; } 
         public DateTime DateModified { get; set; }
         

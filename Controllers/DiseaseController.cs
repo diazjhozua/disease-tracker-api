@@ -59,6 +59,8 @@ namespace disease_tracker_api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DiseaseCreateDTO disease)
         {
+            ServiceResponse<List<DiseaseDTO>> response = await _diseaseService.AddDisease(disease);
+            if (response.Data == null) return new NotFoundObjectResult(_handler.Utility.FormatObjectResult(404, Entities.Organization, new {  }));
             return Ok(await _diseaseService.AddDisease(disease));
         }
 
